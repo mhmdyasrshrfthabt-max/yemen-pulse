@@ -2,109 +2,290 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نبض اليمن | Yemen Pulse System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>نبض اليمن | Yemen Pulse System - النسخة السحرية</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
         :root {
-            --primary-glow: #00e676;
-            --text-main: #ffffff;
-            --text-dim: #b3b3b3;
+            --primary-glow: #00ff88;
+            --secondary-glow: #00ccff;
+            --bg-dark: #0a0f1c;
+            --card-bg: rgba(12, 18, 28, 0.75);
+            --pulse-color: #00ff88;
         }
 
         body {
-            margin: 0; padding: 0;
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* خلفية متحركة احترافية */
-            background: linear-gradient(-45deg, #0b0e11, #161b22, #052c1a, #0b0e11);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Tahoma', 'Cairo', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            background: radial-gradient(circle at 20% 30%, #0a0f1c, #03060c);
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* حاوية الجسيمات المتحركة */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
         }
 
         .app-container {
-            width: 90%; max-width: 400px;
-            background: rgba(22, 27, 34, 0.8); /* تأثير زجاجي */
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 25px; padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 480px;
+            background: var(--card-bg);
+            backdrop-filter: blur(14px);
+            border-radius: 52px;
+            padding: 30px 20px 40px;
             text-align: center;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 255, 136, 0.2);
+            transition: all 0.3s ease;
+            animation: floatIn 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
 
-        h1 { 
-            color: var(--primary-glow); 
-            margin: 0; font-size: 2.2rem;
-            text-shadow: 0 0 20px rgba(0, 230, 118, 0.5);
+        @keyframes floatIn {
+            0% { transform: scale(0.9) translateY(40px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
         }
 
-        .subtitle { 
-            color: var(--text-dim); 
-            font-size: 0.75rem; 
-            letter-spacing: 3px; 
-            margin-bottom: 30px; 
-            text-transform: uppercase;
+        /* رادار خيالي خلف الشعار */
+        .radar-ring {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: radial-gradient(circle, transparent 60%, rgba(0,255,136,0.2) 100%);
+            border: 1px solid rgba(0,255,136,0.5);
+            animation: radarSpin 8s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes radarSpin {
+            0% { transform: translateX(-50%) rotate(0deg); opacity: 0.3; }
+            100% { transform: translateX(-50%) rotate(360deg); opacity: 0.8; }
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            background: linear-gradient(135deg, #00ff88, #00ccff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.2rem;
+            text-shadow: 0 0 15px rgba(0,255,136,0.3);
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #a0b0c0;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        /* حاوية النبض مع القلب */
+        .pulse-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .heart-icon {
+            font-size: 2rem;
+            display: inline-block;
+            filter: drop-shadow(0 0 6px #ff3366);
+            transition: transform 0.1s ease;
+        }
+
+        .heart-beat {
+            animation: heartPop 0.25s ease-in-out;
+        }
+
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); color: #ff5577; text-shadow: 0 0 12px red; }
+            100% { transform: scale(1); }
         }
 
         .pulse-container {
-            display: flex; align-items: center; justify-content: center;
-            height: 200px; margin: 20px 0; gap: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 220px;
+            margin: 15px 0;
+            gap: 25px;
         }
 
         .scale-labels {
-            display: flex; flex-direction: column; justify-content: space-between;
-            height: 100%; color: var(--text-dim); font-size: 0.7rem; font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            color: #8a9bb0;
+            font-size: 0.7rem;
+            font-weight: bold;
         }
 
         .progress-track {
-            width: 45px; height: 100%;
-            background: rgba(0, 0, 0, 0.3); border-radius: 12px;
-            position: relative; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05);
+            width: 55px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 255, 136, 0.5);
+            box-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
         }
 
         .progress-fill {
-            width: 100%; 
-            background: linear-gradient(to top, #00c853, var(--primary-glow));
-            position: absolute; bottom: 0;
-            transition: height 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 20px var(--primary-glow);
+            width: 100%;
+            background: linear-gradient(to top, #00cc88, var(--pulse-color));
+            position: absolute;
+            bottom: 0;
+            transition: height 1s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            box-shadow: 0 0 20px var(--pulse-color);
+            border-radius: 30px;
         }
 
-        .digital-display { margin-top: 25px; }
-        
-        .pulse-value { 
-            font-size: 5rem; font-weight: 900; 
-            color: var(--primary-glow); margin: 0;
+        .digital-display {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 60px;
+            padding: 12px 20px;
+            margin: 15px auto;
+            width: 85%;
+            backdrop-filter: blur(4px);
+        }
+
+        .pulse-value {
+            font-size: 4.8rem;
+            font-weight: 900;
+            color: var(--pulse-color);
+            margin: 0;
             line-height: 1;
-            text-shadow: 0 0 30px rgba(0, 230, 118, 0.3);
-        }
-        
-        .mode-badge {
-            display: inline-block; margin-top: 20px; padding: 12px 30px;
-            background: rgba(0, 230, 118, 0.05); 
-            border: 1px solid var(--primary-glow);
-            border-radius: 50px; color: var(--primary-glow); 
-            font-weight: bold; font-size: 1.1rem;
-            box-shadow: 0 0 15px rgba(0, 230, 118, 0.1);
+            text-shadow: 0 0 20px var(--pulse-color);
+            transition: all 0.2s;
         }
 
-        .footer-info { 
-            margin-top: 40px; font-size: 0.75rem; 
-            color: var(--text-dim); opacity: 0.6;
+        .value-glow {
+            animation: numberFlash 0.3s ease-out;
+        }
+
+        @keyframes numberFlash {
+            0% { text-shadow: 0 0 0px var(--pulse-color); transform: scale(1);}
+            50% { text-shadow: 0 0 35px white; transform: scale(1.08);}
+            100% { text-shadow: 0 0 20px var(--pulse-color); transform: scale(1);}
+        }
+
+        .mode-badge {
+            display: inline-block;
+            margin: 15px auto 5px;
+            padding: 10px 28px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border: 1px solid var(--pulse-color);
+            color: var(--pulse-color);
+            backdrop-filter: blur(5px);
+            animation: gentlePulse 2s infinite;
+        }
+
+        @keyframes gentlePulse {
+            0% { box-shadow: 0 0 0 0 rgba(0,255,136,0.2);}
+            100% { box-shadow: 0 0 0 8px rgba(0,255,136,0);}
+        }
+
+        /* منحنى ECG الحي */
+        .ecg-canvas {
+            width: 100%;
+            height: 65px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 25px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .magic-button {
+            background: linear-gradient(45deg, #1f2a3a, #0e1a24);
+            border: 1px solid #00ffaa;
+            color: #aaffdd;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .magic-button:hover {
+            transform: scale(1.02);
+            background: #00aa6655;
+            color: white;
+            box-shadow: 0 0 15px #00ffaa;
+        }
+
+        .ripple-effect {
+            animation: ripple 0.6s ease-out forwards;
+        }
+
+        @keyframes ripple {
+            0% { box-shadow: 0 0 0 0 #00ffaa, 0 0 0 0 #00ffaa; opacity: 0.8;}
+            100% { box-shadow: 0 0 0 20px transparent, 0 0 0 40px transparent; opacity: 0;}
+        }
+
+        .clock {
+            font-size: 0.8rem;
+            font-family: monospace;
+            color: #b9d5ff;
+            margin-top: 15px;
+            letter-spacing: 1px;
+        }
+
+        .footer-info {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            opacity: 0.5;
+            color: #ccc;
         }
     </style>
 </head>
 <body>
 
+<canvas id="particleCanvas"></canvas>
+
 <div class="app-container">
+    <div class="radar-ring"></div>
     <h1>نبض اليمن</h1>
-    <div class="subtitle">Yemen Pulse System</div>
+    <div class="subtitle">Yemen Pulse | نظام سحري</div>
+
+    <div class="pulse-header">
+        <span class="heart-icon" id="heartIcon">❤️</span>
+        <span style="color:#88aa99;">النبض الحي</span>
+    </div>
 
     <div class="pulse-container">
         <div class="scale-labels"><span>0</span><span>250</span><span>500</span><span>750</span><span>1000</span></div>
@@ -115,53 +296,227 @@
 
     <div class="digital-display">
         <p class="pulse-value" id="pulseNumber">000</p>
-        <span style="color: var(--text-dim); font-weight: bold; letter-spacing: 1px;">PULSE / 1000</span>
+        <span style="color: var(--text-dim); font-weight: bold;">PULSE / 1000</span>
     </div>
 
     <div class="mode-badge" id="modeName">جاري المزامنة...</div>
 
+    <!-- رسم ECG ديناميكي -->
+    <canvas id="ecgCanvas" class="ecg-canvas" width="400" height="60" style="width:100%; height:60px"></canvas>
+
+    <button class="magic-button" id="magicTouch">✨ لمسة سحرية ✨</button>
+    <div class="clock" id="liveClock"></div>
+
     <div class="footer-info">
-        تم التطوير بواسطة محمد ياسر شرف &copy; 2026
+        تم التطوير بواسطة محمد ياسر شرف • إصدار خيالي 2026
     </div>
 </div>
 
 <script>
+    // --- جسيمات الخلفية التفاعلية (سحرية) ---
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let mouseX = 0, mouseY = 0;
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.radius = Math.random() * 2.5 + 1;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.3;
+            this.alpha = Math.random() * 0.5 + 0.2;
+            this.color = `rgba(0, 200, 150, ${this.alpha})`;
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            // تأثير الماوس: تنافر بسيط
+            const dx = mouseX - this.x;
+            const dy = mouseY - this.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < 100) {
+                const angle = Math.atan2(dy, dx);
+                const force = (100 - dist) / 800;
+                this.x -= Math.cos(angle) * force;
+                this.y -= Math.sin(angle) * force;
+            }
+            if (this.x < 0) this.x = canvas.width;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.y < 0) this.y = canvas.height;
+            if (this.y > canvas.height) this.y = 0;
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(100, 255, 180, ${this.alpha})`;
+            ctx.fill();
+        }
+    }
+
+    function initParticles(count = 80) {
+        particles = [];
+        for (let i = 0; i < count; i++) particles.push(new Particle());
+    }
+
+    function animateParticles() {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let p of particles) {
+            p.update();
+            p.draw();
+        }
+        requestAnimationFrame(animateParticles);
+    }
+    resizeCanvas();
+    initParticles(100);
+    animateParticles();
+
+    // --- منطق النبض الرئيسي + تحسينات سحرية ---
+    const pulseNumberSpan = document.getElementById('pulseNumber');
+    const fillDiv = document.getElementById('fill');
+    const modeSpan = document.getElementById('modeName');
+    const heartIcon = document.getElementById('heartIcon');
+    const ecgCanvasElem = document.getElementById('ecgCanvas');
+    const ctxEcg = ecgCanvasElem.getContext('2d');
+    let ecgPoints = [];
+    let lastPulse = 0;
+
+    // تحديث الساعة
+    function updateClock() {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        document.getElementById('liveClock').innerText = `⏱️ ${timeStr}`;
+    }
+
+    // رسم إشارة ECG بناءً على قيمة النبض
+    function drawECG(pulseVal) {
+        const w = ecgCanvasElem.clientWidth;
+        const h = 50;
+        ecgCanvasElem.width = w;
+        ecgCanvasElem.height = h;
+        ctxEcg.clearRect(0, 0, w, h);
+        ctxEcg.beginPath();
+        ctxEcg.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--pulse-color').trim() || '#00ff88';
+        ctxEcg.lineWidth = 2;
+        ctxEcg.shadowBlur = 4;
+        ctxEcg.shadowColor = '#0f0';
+
+        // عدد النقاط
+        const steps = 60;
+        for (let i = 0; i <= steps; i++) {
+            let x = (i / steps) * w;
+            let y;
+            // محاكاة شكل ECG : القمة تعتمد على النبض
+            let spikeFactor = pulseVal / 1000; // 0..1
+            let phase = (Date.now() / 180 + i * 0.5) % (Math.PI * 2);
+            let normal = Math.sin(phase) * 8 * spikeFactor;
+            if (i % 12 === 5 && spikeFactor > 0.3) normal += 12 * spikeFactor; // ذروة نبض
+            y = h/2 + normal + (Math.random() * 1.5);
+            y = Math.min(h-3, Math.max(3, y));
+            if (i === 0) ctxEcg.moveTo(x, y);
+            else ctxEcg.lineTo(x, y);
+        }
+        ctxEcg.stroke();
+    }
+
+    function applyPulseGlow(color) {
+        document.documentElement.style.setProperty('--pulse-color', color);
+        fillDiv.style.boxShadow = `0 0 20px ${color}`;
+        modeSpan.style.borderColor = color;
+        modeSpan.style.color = color;
+        pulseNumberSpan.style.color = color;
+    }
+
     function updateApp() {
         const now = new Date();
         const seconds = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
-        const pulseValue = Math.floor((seconds / 86400) * 1000);
+        let pulseValue = Math.floor((seconds / 86400) * 1000);
+        // إضافة حيوية - اهتزاز بسيط في حدود 1-2 نقطة لجعلها أكثر واقعية (حركة خيالية)
+        pulseValue = Math.min(1000, Math.max(0, pulseValue + (Math.sin(Date.now() / 500) * 0.8)));
+        pulseValue = Math.floor(pulseValue);
         
-        const pulseEl = document.getElementById('pulseNumber');
-        const fillEl = document.getElementById('fill');
-        const modeEl = document.getElementById('modeName');
-
-        pulseEl.innerText = pulseValue.toString().padStart(3, '0');
-        fillEl.style.height = (pulseValue / 1000 * 100) + "%";
-
-        let mode = "";
-        let themeColor = "#00e676";
-
-        if (pulseValue >= 250 && pulseValue < 500) {
-            mode = "مدى البكور 🌅";
-        } else if (pulseValue >= 500 && pulseValue < 750) {
-            mode = "مدى القيل 👑";
-        } else if (pulseValue >= 750 && pulseValue <= 1000) {
-            mode = "مدى السمر ✨";
-        } else {
-            mode = "مدى الهجوع 🌙";
-            themeColor = "#4cc9f0"; 
+        if (lastPulse !== pulseValue) {
+            // تأثير نبض القلب
+            heartIcon.classList.add('heart-beat');
+            setTimeout(() => heartIcon.classList.remove('heart-beat'), 250);
+            // وميض الرقم
+            pulseNumberSpan.classList.add('value-glow');
+            setTimeout(() => pulseNumberSpan.classList.remove('value-glow'), 300);
+            lastPulse = pulseValue;
         }
-
-        modeEl.innerText = mode;
-        modeEl.style.borderColor = themeColor;
-        modeEl.style.color = themeColor;
-        pulseEl.style.color = themeColor;
-        fillEl.style.boxShadow = `0 0 20px ${themeColor}`;
+        
+        pulseNumberSpan.innerText = pulseValue.toString().padStart(3, '0');
+        let heightPercent = (pulseValue / 1000) * 100;
+        fillDiv.style.height = heightPercent + "%";
+        
+        let mode = "";
+        let themeColor = "#00ff88";
+        
+        if (pulseValue >= 250 && pulseValue < 500) {
+            mode = "مدى البكور 🌅✨";
+            themeColor = "#ffaa44";
+        } else if (pulseValue >= 500 && pulseValue < 750) {
+            mode = "مدى القيل 👑🔥";
+            themeColor = "#ff7760";
+        } else if (pulseValue >= 750 && pulseValue <= 1000) {
+            mode = "مدى السمر 🌙💫";
+            themeColor = "#dd88ff";
+        } else {
+            mode = "مدى الهجوع 🌌💤";
+            themeColor = "#44bbff";
+        }
+        
+        modeSpan.innerText = mode;
+        applyPulseGlow(themeColor);
+        drawECG(pulseValue);
     }
-
-    setInterval(updateApp, 1000);
+    
+    // اللمسة السحرية (زر تفاعلي)
+    const magicBtn = document.getElementById('magicTouch');
+    magicBtn.addEventListener('click', () => {
+        // تأثير بصري جميل + رقصة النبض الخيالية
+        magicBtn.classList.add('ripple-effect');
+        setTimeout(() => magicBtn.classList.remove('ripple-effect'), 600);
+        
+        // تغيير لون مؤقت ثم يعود
+        const originalColor = getComputedStyle(document.documentElement).getPropertyValue('--pulse-color').trim();
+        document.documentElement.style.setProperty('--pulse-color', '#ff66cc');
+        fillDiv.style.boxShadow = '0 0 40px #ff66cc';
+        pulseNumberSpan.style.textShadow = '0 0 35px white';
+        
+        // إظهار قفزة وهمية على القلب
+        for(let i=0;i<3;i++) {
+            setTimeout(() => {
+                heartIcon.classList.add('heart-beat');
+                setTimeout(() => heartIcon.classList.remove('heart-beat'), 150);
+            }, i*100);
+        }
+        
+        setTimeout(() => {
+            applyPulseGlow(originalColor);
+            pulseNumberSpan.style.textShadow = '';
+        }, 800);
+    });
+    
+    setInterval(() => {
+        updateApp();
+        updateClock();
+    }, 1000);
     updateApp();
+    updateClock();
+    setInterval(() => drawECG(parseInt(pulseNumberSpan.innerText) || 0), 80);
 </script>
-
 </body>
 </html>
