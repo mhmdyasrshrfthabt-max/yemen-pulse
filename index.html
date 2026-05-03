@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نبض اليمن | Yemen Pulse System</title>
+    <style>
+        :root {
+            --bg-color: #0b0e11;
+            --card-bg: #161b22;
+            --primary-glow: #00e676;
+            --text-main: #ffffff;
+            --text-dim: #8b949e;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden;
+        }
+
+        .app-container {
+            width: 90%; max-width: 400px;
+            background: var(--card-bg);
+            border: 2px solid #30363d;
+            border-radius: 20px; padding: 30px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 230, 118, 0.1);
+        }
+
+        h1 { color: var(--primary-glow); margin-bottom: 5px; }
+        .subtitle { color: var(--text-dim); font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 30px; }
+
+        /* الميزان العمودي */
+        .pulse-container {
+            display: flex; align-items: center; justify-content: space-around;
+            height: 250px; margin: 20px 0;
+        }
+
+        .scale-labels {
+            display: flex; flex-direction: column; justify-content: space-between;
+            height: 100%; color: var(--text-dim); font-size: 0.7rem; font-weight: bold;
+        }
+
+        .progress-track {
+            width: 50px; height: 100%;
+            background: #21262d; border-radius: 8px;
+            position: relative; overflow: hidden; border: 1px solid #30363d;
+        }
+
+        .progress-fill {
+            width: 100%; background: linear-gradient(to top, #00c853, var(--primary-glow));
+            position: absolute; bottom: 0;
+            transition: height 1s ease-in-out;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .digital-display { margin-top: 20px; }
+        .pulse-value { font-size: 4rem; font-weight: bold; color: var(--primary-glow); margin: 0; }
+        
+        .mode-badge {
+            display: inline-block; margin-top: 15px; padding: 10px 25px;
+            background: rgba(0, 230, 118, 0.1); border: 1px solid var(--primary-glow);
+            border-radius: 50px; color: var(--primary-glow); font-weight: bold;
+        }
+
+        .footer-info { margin-top: 30px; font-size: 0.7rem; color: #484f58; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h1>نبض اليمن</h1>
+    <div class="subtitle">YEMEN PULSE SYSTEM</div>
+
+    <div class="pulse-container">
+        <div class="scale-labels"><span>0</span><span>250</span><span>500</span><span>750</span><span>1000</span></div>
+        <div class="progress-track">
+            <div class="progress-fill" id="fill"></div>
+        </div>
+    </div>
+
+    <div class="digital-display">
+        <p class="pulse-value" id="pulseNumber">000</p>
+        <span style="color: var(--text-dim)">PULSE / 1000</span>
+    </div>
+
+    <div class="mode-badge" id="modeName">جاري المزامنة...</div>
+
+    <div class="footer-info">
+        &copy; 2026 تم التطوير بواسطة محمد ياسر شرف
+    </div>
+</div>
+
+<script>
+    function updateApp() {
+        const now = new Date();
+        const seconds = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
+        const pulseValue = Math.floor((seconds / 86400) * 1000);
+        
+        document.getElementById('pulseNumber').innerText = pulseValue.toString().padStart(3, '0');
+        document.getElementById('fill').style.height = (pulseValue / 1000 * 100) + "%";
+
+        let mode = "";
+        if (pulseValue >= 250 && pulseValue < 500) mode = "مدى البكور 🌅";
+        else if (pulseValue >= 500 && pulseValue < 750) mode = "مدى القيل 👑";
+        else if (pulseValue >= 750 && pulseValue <= 1000) mode = "مدى السمر ✨";
+        else mode = "مدى الهجوع 🌙";
+
+        document.getElementById('modeName').innerText = mode;
+    }
+
+    setInterval(updateApp, 1000);
+    updateApp();
+</script>
+
+</body>
+</html>
