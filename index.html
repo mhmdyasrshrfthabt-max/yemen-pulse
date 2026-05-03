@@ -6,38 +6,55 @@
     <title>نبض اليمن | Yemen Pulse System</title>
     <style>
         :root {
-            --bg-color: #0b0e11;
-            --card-bg: #161b22;
             --primary-glow: #00e676;
             --text-main: #ffffff;
-            --text-dim: #8b949e;
+            --text-dim: #b3b3b3;
         }
 
         body {
             margin: 0; padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex; justify-content: center; align-items: center;
             height: 100vh; overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* خلفية متحركة احترافية */
+            background: linear-gradient(-45deg, #0b0e11, #161b22, #052c1a, #0b0e11);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .app-container {
             width: 90%; max-width: 400px;
-            background: var(--card-bg);
-            border: 2px solid #30363d;
-            border-radius: 20px; padding: 30px;
+            background: rgba(22, 27, 34, 0.8); /* تأثير زجاجي */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px; padding: 40px 20px;
             text-align: center;
-            box-shadow: 0 0 30px rgba(0, 230, 118, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         }
 
-        h1 { color: var(--primary-glow); margin-bottom: 5px; }
-        .subtitle { color: var(--text-dim); font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 30px; }
+        h1 { 
+            color: var(--primary-glow); 
+            margin: 0; font-size: 2.2rem;
+            text-shadow: 0 0 20px rgba(0, 230, 118, 0.5);
+        }
 
-        /* الميزان العمودي */
+        .subtitle { 
+            color: var(--text-dim); 
+            font-size: 0.75rem; 
+            letter-spacing: 3px; 
+            margin-bottom: 30px; 
+            text-transform: uppercase;
+        }
+
         .pulse-container {
-            display: flex; align-items: center; justify-content: space-around;
-            height: 250px; margin: 20px 0;
+            display: flex; align-items: center; justify-content: center;
+            height: 200px; margin: 20px 0; gap: 20px;
         }
 
         .scale-labels {
@@ -46,35 +63,48 @@
         }
 
         .progress-track {
-            width: 50px; height: 100%;
-            background: #21262d; border-radius: 8px;
-            position: relative; overflow: hidden; border: 1px solid #30363d;
+            width: 45px; height: 100%;
+            background: rgba(0, 0, 0, 0.3); border-radius: 12px;
+            position: relative; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .progress-fill {
-            width: 100%; background: linear-gradient(to top, #00c853, var(--primary-glow));
+            width: 100%; 
+            background: linear-gradient(to top, #00c853, var(--primary-glow));
             position: absolute; bottom: 0;
-            transition: height 1s ease-in-out;
-            box-shadow: 0 0 15px var(--primary-glow);
+            transition: height 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 20px var(--primary-glow);
         }
 
-        .digital-display { margin-top: 20px; }
-        .pulse-value { font-size: 4rem; font-weight: bold; color: var(--primary-glow); margin: 0; }
+        .digital-display { margin-top: 25px; }
+        
+        .pulse-value { 
+            font-size: 5rem; font-weight: 900; 
+            color: var(--primary-glow); margin: 0;
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(0, 230, 118, 0.3);
+        }
         
         .mode-badge {
-            display: inline-block; margin-top: 15px; padding: 10px 25px;
-            background: rgba(0, 230, 118, 0.1); border: 1px solid var(--primary-glow);
-            border-radius: 50px; color: var(--primary-glow); font-weight: bold;
+            display: inline-block; margin-top: 20px; padding: 12px 30px;
+            background: rgba(0, 230, 118, 0.05); 
+            border: 1px solid var(--primary-glow);
+            border-radius: 50px; color: var(--primary-glow); 
+            font-weight: bold; font-size: 1.1rem;
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.1);
         }
 
-        .footer-info { margin-top: 30px; font-size: 0.7rem; color: #484f58; }
+        .footer-info { 
+            margin-top: 40px; font-size: 0.75rem; 
+            color: var(--text-dim); opacity: 0.6;
+        }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <h1>نبض اليمن</h1>
-    <div class="subtitle">YEMEN PULSE SYSTEM</div>
+    <div class="subtitle">Yemen Pulse System</div>
 
     <div class="pulse-container">
         <div class="scale-labels"><span>0</span><span>250</span><span>500</span><span>750</span><span>1000</span></div>
@@ -85,13 +115,13 @@
 
     <div class="digital-display">
         <p class="pulse-value" id="pulseNumber">000</p>
-        <span style="color: var(--text-dim)">PULSE / 1000</span>
+        <span style="color: var(--text-dim); font-weight: bold; letter-spacing: 1px;">PULSE / 1000</span>
     </div>
 
     <div class="mode-badge" id="modeName">جاري المزامنة...</div>
 
     <div class="footer-info">
-        &copy; 2026 تم التطوير بواسطة محمد ياسر شرف
+        تم التطوير بواسطة محمد ياسر شرف &copy; 2026
     </div>
 </div>
 
@@ -101,16 +131,32 @@
         const seconds = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
         const pulseValue = Math.floor((seconds / 86400) * 1000);
         
-        document.getElementById('pulseNumber').innerText = pulseValue.toString().padStart(3, '0');
-        document.getElementById('fill').style.height = (pulseValue / 1000 * 100) + "%";
+        const pulseEl = document.getElementById('pulseNumber');
+        const fillEl = document.getElementById('fill');
+        const modeEl = document.getElementById('modeName');
+
+        pulseEl.innerText = pulseValue.toString().padStart(3, '0');
+        fillEl.style.height = (pulseValue / 1000 * 100) + "%";
 
         let mode = "";
-        if (pulseValue >= 250 && pulseValue < 500) mode = "مدى البكور 🌅";
-        else if (pulseValue >= 500 && pulseValue < 750) mode = "مدى القيل 👑";
-        else if (pulseValue >= 750 && pulseValue <= 1000) mode = "مدى السمر ✨";
-        else mode = "مدى الهجوع 🌙";
+        let themeColor = "#00e676";
 
-        document.getElementById('modeName').innerText = mode;
+        if (pulseValue >= 250 && pulseValue < 500) {
+            mode = "مدى البكور 🌅";
+        } else if (pulseValue >= 500 && pulseValue < 750) {
+            mode = "مدى القيل 👑";
+        } else if (pulseValue >= 750 && pulseValue <= 1000) {
+            mode = "مدى السمر ✨";
+        } else {
+            mode = "مدى الهجوع 🌙";
+            themeColor = "#4cc9f0"; 
+        }
+
+        modeEl.innerText = mode;
+        modeEl.style.borderColor = themeColor;
+        modeEl.style.color = themeColor;
+        pulseEl.style.color = themeColor;
+        fillEl.style.boxShadow = `0 0 20px ${themeColor}`;
     }
 
     setInterval(updateApp, 1000);
